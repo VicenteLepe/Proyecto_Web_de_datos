@@ -6,6 +6,7 @@
 
 # Definir tripletas dentro de games-data.sparql
 
+```
 PREFIX ex: <http://ex.org/a#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
@@ -28,3 +29,4 @@ WHERE {
   BIND (xsd:integer(?numEmps) AS ?numEmployees)
   BIND (xsd:decimal(?raisedAmt) AS ?amount)
 }
+```
