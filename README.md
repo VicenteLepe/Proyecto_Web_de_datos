@@ -4,7 +4,11 @@
 ~$ cd tarql/target/appassembler
 
 
-~$ sh bin/tarql --ntriples ../../../games-data.sparql ../../../games-data.csv > games-data.ttl
+~$ sh bin/tarql --ntriples ../../../games-data-clean.sparql ../../../games-data-clean2.csv > games-data-triples.ttl
+
+
+~$ sort -u ../../../games-data-triples.ttl -o ../../../games-data-triples.ttl
+
 
 # Definir tripletas dentro de games-data.sparql
 
