@@ -13,26 +13,29 @@
 # Definir tripletas dentro de games-data.sparql
 
 ```
-PREFIX ex: <http://ex.org/a#>
+PREFIX ex: <http://example.org/game#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 CONSTRUCT {
-  ?URI a ex:Organization;
-    ex:permalink ?permalink;
-    ex:name ?company;
-    ex:employees ?numEmployees;
-    ex:category ?category;
-    ex:city ?city;
-    ex:state ?state;
-    ex:fundationDate ?fundedDate;
-    ex:raisedAmt ?amount;
-    ex:raisedCurrency ?raisedCurrency;
-    ex:round ?round;
-} 
-FROM <file:TechCrunchcontinentalUSA.csv> 
+  ?gameURI a ex:Game ;
+       ex:name ?name ;
+       ex:platform ?platform ;
+       ex:releaseDate ?releaseDate ;
+       ex:score ?scoreValue ;
+       ex:userScore ?userScoreValue ;
+       ex:developer ?developer ;
+       ex:genre ?genre ;
+       ex:players ?players ;
+       ex:critics ?criticsNum ;
+       ex:users ?usersNum .
+}
+FROM <file:games-data-clean.csv>
 WHERE {
-  BIND (URI(CONCAT('http://ex.org/companies/', ?permalink)) AS ?URI)
-  BIND (xsd:integer(?numEmps) AS ?numEmployees)
-  BIND (xsd:decimal(?raisedAmt) AS ?amount)
+  BIND(URI(CONCAT(CONCAT("http://ex.org/games/",ENCODE_FOR_URI(REPLACE(STR(?name), "[^A-Za-z0-9]+", "_")),ENCODE_FOR_URI(REPLACE(STR(?platform), "[^A-Za-z0-9]+", "_"))))) AS ?gameURI)
+  BIND(xsd:date(?r_date) AS ?releaseDate)
+  BIND(xsd:integer(?score) AS ?scoreValue)
+  BIND(xsd:decimal(?user_score) AS ?userScoreValue)
+  BIND(xsd:integer(?critics) AS ?criticsNum)
+  BIND(xsd:integer(?users) AS ?usersNum)
 }
 ```
