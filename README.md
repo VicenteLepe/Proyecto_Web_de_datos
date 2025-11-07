@@ -2,7 +2,9 @@
 
 
 ~$ cd tarql/target/appassembler
-~$ sh bin/tarql --ntriples ../../../games-data.sparql ../../../games-data.csv
+
+
+~$ sh bin/tarql --ntriples ../../../games-data.sparql ../../../games-data.csv > games-data.ttl
 
 # Definir tripletas dentro de games-data.sparql
 
