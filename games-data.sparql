@@ -1,0 +1,24 @@
+PREFIX ex: <http://ex.org/a#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+CONSTRUCT {
+  ?URI a ex:Game;
+    ex:name ?name;
+    ex:platform ?platform;
+    ex:r_date ?r_date;
+    ex:score ?score;
+    ex:user_score ?user_scorescore;
+    ex:developer ?developer;
+    ex:genre ?genre;
+    ex:players ?players;
+    ex:critics ?critics;
+    ex:users ?users;
+} 
+FROM <file:games-data.csv> 
+WHERE {
+  BIND (URI(CONCAT('pegar http aqui/', ?name)) AS ?URI)
+  BIND (xsd:integer(?score) AS ?intScore)
+  BIND (xsd:decimal(?user_scorescore) AS ?intUser_score)
+  BIND (xsd:integer(?critics) AS ?numCritics)
+  BIND (xsd:integer(?users) AS ?numUsers)
+}
