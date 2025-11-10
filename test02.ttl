@@ -1,7 +1,4 @@
-@base <http://raw.githubusercontent.com/VicenteLepe/Proyecto_Web_de_datos/refs/heads/main/test02.ttl> .
-
-@prefix ex: <http://example.org/game#> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@base <http://example.org/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
