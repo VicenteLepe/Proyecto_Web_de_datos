@@ -1,0 +1,64 @@
+@prefix ex: <http://example.org/game#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://example.org/games/007_LegendsPlayStation3> <http://example.org/game#critics> "22"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://example.org/games/007_LegendsPlayStation3> <http://example.org/game#developer> <http://example.org/developer/EurocomEntertainmentSoftware_Eurocom> .
+<http://example.org/games/007_LegendsPlayStation3> <http://example.org/game#genre> "Action" .
+<http://example.org/games/007_LegendsPlayStation3> <http://example.org/game#genre> "Arcade" .
+<http://example.org/games/007_LegendsPlayStation3> <http://example.org/game#genre> "First-Person" .
+<http://example.org/games/007_LegendsPlayStation3> <http://example.org/game#genre> "Modern" .
+<http://example.org/games/007_LegendsPlayStation3> <http://example.org/game#genre> "Shooter" .
+<http://example.org/games/007_LegendsPlayStation3> <http://example.org/game#name> "007 Legends" .
+<http://example.org/games/007_LegendsPlayStation3> <http://example.org/game#platform> <http://example.org/platform/PlayStation3> .
+<http://example.org/games/007_LegendsPlayStation3> <http://example.org/game#players> "Up to 12 " .
+<http://example.org/games/007_LegendsPlayStation3> <http://example.org/game#releaseDate> "2012-10-16"^^<http://www.w3.org/2001/XMLSchema#date> .
+<http://example.org/games/007_LegendsPlayStation3> <http://example.org/game#score> "41"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://example.org/games/007_LegendsPlayStation3> <http://example.org/game#userScore> "4.2"^^<http://www.w3.org/2001/XMLSchema#decimal> .
+<http://example.org/games/007_LegendsPlayStation3> <http://example.org/game#users> "52"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://example.org/games/007_LegendsPlayStation3> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/game#Game> .
+<http://example.org/games/007_LegendsXbox360> <http://example.org/game#critics> "49"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://example.org/games/007_LegendsXbox360> <http://example.org/game#developer> <http://example.org/developer/EurocomEntertainmentSoftware_Eurocom> .
+<http://example.org/games/007_LegendsXbox360> <http://example.org/game#genre> "Action" .
+<http://example.org/games/007_LegendsXbox360> <http://example.org/game#genre> "Arcade" .
+<http://example.org/games/007_LegendsXbox360> <http://example.org/game#genre> "First-Person" .
+<http://example.org/games/007_LegendsXbox360> <http://example.org/game#genre> "Modern" .
+<http://example.org/games/007_LegendsXbox360> <http://example.org/game#genre> "Shooter" .
+<http://example.org/games/007_LegendsXbox360> <http://example.org/game#name> "007 Legends" .
+<http://example.org/games/007_LegendsXbox360> <http://example.org/game#platform> <http://example.org/platform/Xbox360> .
+<http://example.org/games/007_LegendsXbox360> <http://example.org/game#players> "Up to 12 " .
+<http://example.org/games/007_LegendsXbox360> <http://example.org/game#releaseDate> "2012-10-16"^^<http://www.w3.org/2001/XMLSchema#date> .
+<http://example.org/games/007_LegendsXbox360> <http://example.org/game#score> "45"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://example.org/games/007_LegendsXbox360> <http://example.org/game#userScore> "4.5"^^<http://www.w3.org/2001/XMLSchema#decimal> .
+<http://example.org/games/007_LegendsXbox360> <http://example.org/game#users> "77"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://example.org/games/007_LegendsXbox360> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/game#Game> .
+<http://example.org/games/007_NightFirePC> <http://example.org/game#critics> "14"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://example.org/games/007_NightFirePC> <http://example.org/game#developer> <http://example.org/developer/GearboxSoftware> .
+<http://example.org/games/007_NightFirePC> <http://example.org/game#genre> "Action" .
+<http://example.org/games/007_NightFirePC> <http://example.org/game#genre> "Arcade" .
+<http://example.org/games/007_NightFirePC> <http://example.org/game#genre> "First-Person" .
+<http://example.org/games/007_NightFirePC> <http://example.org/game#genre> "Modern" .
+<http://example.org/games/007_NightFirePC> <http://example.org/game#genre> "Shooter" .
+<http://example.org/games/007_NightFirePC> <http://example.org/game#name> "007: NightFire" .
+<http://example.org/games/007_NightFirePC> <http://example.org/game#platform> <http://example.org/platform/PC> .
+<http://example.org/games/007_NightFirePC> <http://example.org/game#players> "1-32 " .
+<http://example.org/games/007_NightFirePC> <http://example.org/game#releaseDate> "2002-11-28"^^<http://www.w3.org/2001/XMLSchema#date> .
+<http://example.org/games/007_NightFirePC> <http://example.org/game#score> "59"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://example.org/games/007_NightFirePC> <http://example.org/game#userScore> "6.1"^^<http://www.w3.org/2001/XMLSchema#decimal> .
+<http://example.org/games/007_NightFirePC> <http://example.org/game#users> "47"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://example.org/games/007_NightFirePC> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/game#Game> .
+<http://example.org/games/007_Quantum_of_SolacePC> <http://example.org/game#critics> "18"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://example.org/games/007_Quantum_of_SolacePC> <http://example.org/game#developer> <http://example.org/developer/Treyarch_Beenox> .
+<http://example.org/games/007_Quantum_of_SolacePC> <http://example.org/game#genre> "Action" .
+<http://example.org/games/007_Quantum_of_SolacePC> <http://example.org/game#genre> "Arcade" .
+<http://example.org/games/007_Quantum_of_SolacePC> <http://example.org/game#genre> "First-Person" .
+<http://example.org/games/007_Quantum_of_SolacePC> <http://example.org/game#genre> "General" .
+<http://example.org/games/007_Quantum_of_SolacePC> <http://example.org/game#genre> "Modern" .
+<http://example.org/games/007_Quantum_of_SolacePC> <http://example.org/game#genre> "Shooter" .
+<http://example.org/games/007_Quantum_of_SolacePC> <http://example.org/game#name> "007: Quantum of Solace" .
+<http://example.org/games/007_Quantum_of_SolacePC> <http://example.org/game#platform> <http://example.org/platform/PC> .
+<http://example.org/games/007_Quantum_of_SolacePC> <http://example.org/game#players> "Up to 12 " .
+<http://example.org/games/007_Quantum_of_SolacePC> <http://example.org/game#releaseDate> "2008-11-04"^^<http://www.w3.org/2001/XMLSchema#date> .
+<http://example.org/games/007_Quantum_of_SolacePC> <http://example.org/game#score> "70"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://example.org/games/007_Quantum_of_SolacePC> <http://example.org/game#userScore> "6.1"^^<http://www.w3.org/2001/XMLSchema#decimal> .
+<http://example.org/games/007_Quantum_of_SolacePC> <http://example.org/game#users> "64"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://example.org/games/007_Quantum_of_SolacePC> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/game#Game> .
