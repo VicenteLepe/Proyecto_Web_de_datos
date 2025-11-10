@@ -1,3 +1,6 @@
+@prefix ex: <http://example.org/game#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
 <http://example.org/games/007_LegendsPlayStation3> <http://example.org/game#critics> "22"^^<http://www.w3.org/2001/XMLSchema#integer> .
 <http://example.org/games/007_LegendsPlayStation3> <http://example.org/game#developer> <http://example.org/developer/EurocomEntertainmentSoftware_Eurocom> .
 <http://example.org/games/007_LegendsPlayStation3> <http://example.org/game#genre> "Action" .
