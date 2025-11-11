@@ -1,0 +1,57 @@
+PREFIX ex: <http://example.org/game#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX rdf: <http://www.w3.org/2000/01/rdf-schema#>
+
+
+CONSTRUCT {
+  ?gameURI a ex:Game ;
+       rdf:label ?name ;
+       ex:platform ?platformURI ;
+       ex:releaseDate ?releaseDate ;
+       ex:score ?scoreValue ;
+       ex:userScore ?userScoreValue ;
+       ex:developer ?developerURI ;
+       ex:genre ?genreURI ;
+       ex:players ?players ;
+       ex:critics ?criticsNum ;
+       ex:users ?usersNum .
+}
+FROM <file:games-data-clean2.csv>
+WHERE {
+  BIND(URI(CONCAT(CONCAT("http://example.org/games/",ENCODE_FOR_URI(REPLACE(STR(?name), "[^A-Za-z0-9]+", "_")),ENCODE_FOR_URI(REPLACE(STR(?platform), "[^A-Za-z0-9]+", "_"))))) AS ?gameURI)
+  BIND(URI(CONCAT("http://example.org/platform/",ENCODE_FOR_URI(REPLACE(STR(?platform), "[^A-Za-z0-9]+", "_")))) AS ?platformURI)
+  BIND(URI(CONCAT("http://example.org/genre/",ENCODE_FOR_URI(REPLACE(STR(?genre), "[^A-Za-z0-9]+", "_")))) AS ?genreURI)
+  BIND(xsd:date(?r_date) AS ?releaseDate)
+  BIND(xsd:integer(?score) AS ?scoreValue)
+  BIND(xsd:decimal(?user_score) AS ?userScoreValue)
+  BIND(URI(CONCAT("http://example.org/developer/",ENCODE_FOR_URI(REPLACE(STR(?developer), "[^A-Za-z0-9]+", "_")))) AS ?developerURI)
+  BIND(xsd:integer(?critics) AS ?criticsNum)
+  BIND(xsd:integer(?users) AS ?usersNum)
+}
+
+CONSTRUCT {
+  ?platformURI a ex:platform ;
+       rdf:label ?platform ;
+}
+FROM <file:games-data-clean2.csv>
+WHERE {
+  BIND(URI(CONCAT("http://example.org/platform/",ENCODE_FOR_URI(REPLACE(STR(?platform), "[^A-Za-z0-9]+", "_")))) AS ?platformURI)
+}
+
+CONSTRUCT {
+  ?genreURI a ex:genre ;
+       rdf:label ?genre ;
+}
+FROM <file:games-data-clean2.csv>
+WHERE {
+  BIND(URI(CONCAT("http://example.org/genre/",ENCODE_FOR_URI(REPLACE(STR(?genre), "[^A-Za-z0-9]+", "_")))) AS ?genreURI)
+}
+
+CONSTRUCT {
+  ?developerURI a ex:developer ;
+       rdf:label ?developer ;
+}
+FROM <file:games-data-clean2.csv>
+WHERE {
+  BIND(URI(CONCAT("http://example.org/developer/",ENCODE_FOR_URI(REPLACE(STR(?developer), "[^A-Za-z0-9]+", "_")))) AS ?developerURI)
+}
