@@ -1,0 +1,62 @@
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX ex: <http://example.org/game#>
+
+# 0.
+
+SELECT ?name ?platform ?scoreValue
+WHERE {
+  ?game <http://example.org/game#score> ?scoreValue ;
+        <http://example.org/game#name> ?name ;
+        <http://example.org/game#platform> ?platform .
+}
+ORDER BY DESC(?scoreValue)
+LIMIT 10
+# 1/2.
+
+SELECT ?name ?platform ((xsd:decimal(?userScoreValue) * 10 - xsd:decimal(?scoreValue)) AS ?diff)
+WHERE {
+  ?game <http://example.org/game#name> ?name ;
+        <http://example.org/game#platform> ?platform ;
+        <http://example.org/game#score> ?scoreValue ;
+        <http://example.org/game#userScore> ?userScoreValue .
+}
+ORDER BY DESC(ABS(?diff))
+LIMIT 10
+
+# 3.
+
+SELECT ?developer (AVG(?scoreValue) AS ?avgScore) (COUNT(?game) AS ?numGames)
+WHERE {
+  ?game ex:developer ?developer ;
+        ex:score ?scoreValue .
+}
+GROUP BY ?developer
+HAVING (COUNT(?game) >= 10)
+ORDER BY DESC(?avgScore)
+LIMIT 15
+
+SELECT ?developerName (FLOOR(AVG(?scoreValue)*100)/100 AS ?avgScore) (COUNT(?game) AS ?numGames)
+WHERE {
+  ?game ex:developer ?developer ;
+        ex:score ?scoreValue .
+  ?developer rdfs:label ?developerName .
+}
+GROUP BY ?developerName
+HAVING (COUNT(?game) >= 10)
+ORDER BY DESC(?avgScore)
+LIMIT 15
+
+# 4.
+
+# 5.
+
+SELECT ?year (AVG(?scoreValue) AS ?avgCriticScore)
+WHERE {
+  ?game ex:score ?scoreValue ;
+        ex:releaseDate ?date .
+  BIND(year(xsd:date(?date)) AS ?year)
+}
+GROUP BY ?year
+ORDER BY DESC(?avgCriticScore)
