@@ -3,60 +3,141 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX ex: <http://example.org/game#>
 
-# 0.
+# 0. Juegos mejor y peor evaluados (Cambiar DESC por ASC para ver los peores y Cambiar score por userScore para comparar criticos con usuarios)
 
-SELECT ?name ?platform ?scoreValue
+SELECT ?name ?developerName ?platformName ?scoreValue
 WHERE {
-  ?game <http://example.org/game#score> ?scoreValue ;
-        <http://example.org/game#name> ?name ;
-        <http://example.org/game#platform> ?platform .
+  ?game ex:score ?scoreValue ;
+        rdfs:label ?name ;
+        ex:developer ?developer ;
+        ex:platform ?platform .
+  ?developer rdfs:label ?developerName .
+  ?platform rdfs:label ?platformName .
 }
 ORDER BY DESC(?scoreValue)
 LIMIT 10
-# 1/2.
 
-SELECT ?name ?platform ((xsd:decimal(?userScoreValue) * 10 - xsd:decimal(?scoreValue)) AS ?diff)
+# 1. Diferencia entre opiniones de jugadores y criticos (ASC para ver juegos bien evaluados por criticos pero mal evaluados por jugadores y DESC para viseversa)
+
+SELECT ?name ?developerName ?platformName ((xsd:decimal(?userScoreValue) * 10 - xsd:decimal(?scoreValue)) AS ?diff) ?scoreValue ?userScoreValue
 WHERE {
-  ?game <http://example.org/game#name> ?name ;
-        <http://example.org/game#platform> ?platform ;
-        <http://example.org/game#score> ?scoreValue ;
-        <http://example.org/game#userScore> ?userScoreValue .
+  ?game ex:score ?scoreValue ;
+        ex:userScore ?userScoreValue ;
+        rdfs:label ?name ;
+        ex:developer ?developer ;
+        ex:platform ?platform .
+  ?developer rdfs:label ?developerName .
+  ?platform rdfs:label ?platformName .
 }
-ORDER BY DESC(ABS(?diff))
+ORDER BY ASC(?diff)
 LIMIT 10
 
-# 3.
+# 2. Promedio con pesos entre notas de criticos y usuarios.
 
-SELECT ?developer (AVG(?scoreValue) AS ?avgScore) (COUNT(?game) AS ?numGames)
+SELECT ?name 
+       ?developerName 
+       ?platformName 
+       ((FLOOR(((((xsd:decimal(?numUsers)/100)*xsd:decimal(?userScore)*10) + (xsd:decimal(?numCritics)*xsd:decimal(?criticScore)))/((xsd:decimal(?numUsers)/100)+(xsd:decimal(?numCritics)))))*100)/100 AS ?meanScore) 
+       ?criticScore 
+       ?userScore
 WHERE {
-  ?game ex:developer ?developer ;
-        ex:score ?scoreValue .
+  ?game ex:score ?criticScore ;
+        ex:critics ?numCritics ;
+        ex:userScore ?userScore ;
+        ex:users ?numUsers ;
+        rdfs:label ?name ;
+        ex:developer ?developer ;
+        ex:platform ?platform .
+  ?developer rdfs:label ?developerName .
+  ?platform rdfs:label ?platformName .
 }
-GROUP BY ?developer
-HAVING (COUNT(?game) >= 10)
-ORDER BY DESC(?avgScore)
-LIMIT 15
+ORDER BY DESC(?meanScore)
+LIMIT 10
 
-SELECT ?developerName (FLOOR(AVG(?scoreValue)*100)/100 AS ?avgScore) (COUNT(?game) AS ?numGames)
+# 3. Mejor developer y su mejor juego respectivo (probar con ex:score y ex:userScore)
+
+SELECT ?developerName (FLOOR(AVG(?scoreValue)*100)/100 AS ?avgScore) (COUNT(?game) AS ?numGames) ?topGameName ?topScore
 WHERE {
   ?game ex:developer ?developer ;
         ex:score ?scoreValue .
   ?developer rdfs:label ?developerName .
+  
+  {
+    SELECT ?developer (SAMPLE(?gameName) AS ?topGameName) (MAX(?scoreValue) AS ?topScore)
+    WHERE {
+      ?g ex:developer ?developer ;
+         ex:score ?scoreValue ;
+         rdfs:label ?gameName .
+    }
+    GROUP BY ?developer
+  }
 }
-GROUP BY ?developerName
+GROUP BY ?developerName ?topGameName ?topScore
 HAVING (COUNT(?game) >= 10)
 ORDER BY DESC(?avgScore)
-LIMIT 15
+LIMIT 10
 
-# 4.
+# 4. Mejor genero por decada con su mejor juego respectivo (probar con ex:score y ex:userScore, y cambiar los rangos de decadas).
 
-# 5.
+SELECT ?genreName (FLOOR(AVG(?scoreValue)*100)/100 AS ?avgScore) (COUNT(?game) AS ?numGames) ?topGameName ?topScore
+WHERE {
+  ?game ex:genre ?genre ;
+        ex:score ?scoreValue ;
+        ex:releaseDate ?releaseDate .
+  ?genre rdfs:label ?genreName .
+  FILTER(?releaseDate >= "1995-01-01"^^xsd:date && ?releaseDate <= "2005-12-31"^^xsd:date)
+  
+  {
+    SELECT ?genre (SAMPLE(?gameName) AS ?topGameName) (MAX(?scoreValue) AS ?topScore)
+    WHERE {
+      ?g ex:genre ?genre ;
+         ex:score ?scoreValue ;
+         ex:releaseDate ?releaseDate ;
+         rdfs:label ?gameName .
+      FILTER(?releaseDate >= "1995-01-01"^^xsd:date && ?releaseDate <= "2005-12-31"^^xsd:date)
+    }
+    GROUP BY ?genre
+  }
+}
+GROUP BY ?genreName ?topGameName ?topScore
+HAVING (COUNT(?game) >= 10)
+ORDER BY DESC(?avgScore)
+LIMIT 10
 
-SELECT ?year (AVG(?scoreValue) AS ?avgCriticScore)
+# 5. Nota de criticos promedio por año
+
+SELECT ?year (FLOOR(AVG(?scoreValue)*100)/100 AS ?avgScore)
 WHERE {
   ?game ex:score ?scoreValue ;
         ex:releaseDate ?date .
   BIND(year(xsd:date(?date)) AS ?year)
 }
 GROUP BY ?year
-ORDER BY DESC(?avgCriticScore)
+ORDER BY DESC(?avgScore)
+
+# 6. Mejores plataformas por decada, con su mejor juego respectivo (probar con ex:score y ex:userScore, y cambiar los rangos de decadas).
+
+SELECT ?platformName (FLOOR(AVG(?scoreValue)*100)/100 AS ?avgScore) (COUNT(?game) AS ?numGames) ?topGameName ?topScore
+WHERE {
+  ?game ex:platform ?platform ;
+        ex:score ?scoreValue ;
+        ex:releaseDate ?releaseDate .
+  ?platform rdfs:label ?platformName .
+  FILTER(?releaseDate >= "1995-01-01"^^xsd:date && ?releaseDate <= "2005-12-31"^^xsd:date)
+  
+  {
+    SELECT ?platform (SAMPLE(?gameName) AS ?topGameName) (MAX(?scoreValue) AS ?topScore)
+    WHERE {
+      ?g ex:platform ?platform ;
+         ex:score ?scoreValue ;
+         ex:releaseDate ?releaseDate ;
+         rdfs:label ?gameName .
+      FILTER(?releaseDate >= "1995-01-01"^^xsd:date && ?releaseDate <= "2005-12-31"^^xsd:date)
+    }
+    GROUP BY ?platform
+  }
+}
+GROUP BY ?platformName ?topGameName ?topScore
+HAVING (COUNT(?game) >= 10)
+ORDER BY DESC(?avgScore)
+LIMIT 10
