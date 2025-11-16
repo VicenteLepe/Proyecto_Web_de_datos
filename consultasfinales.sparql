@@ -77,15 +77,16 @@ HAVING (COUNT(?game) >= 10)
 ORDER BY DESC(?avgScore)
 LIMIT 10
 
-# 4. Mejor genero por decada con su mejor juego respectivo (probar con ex:score y ex:userScore, y cambiar los rangos de decadas).
+# 4. Mejor género y más popular por lustro con su mejor juego respectivo (ordenar por avgScore y numGames, y cambiar los rangos de lustro).
 
 SELECT ?genreName (FLOOR(AVG(?scoreValue)*100)/100 AS ?avgScore) (COUNT(?game) AS ?numGames) ?topGameName ?topScore
 WHERE {
   ?game ex:genre ?genre ;
         ex:score ?scoreValue ;
-        ex:releaseDate ?releaseDate .
+        ex:releaseDate ?releaseDate ;
+        ex:critics ?critics .
   ?genre rdfs:label ?genreName .
-  FILTER(?releaseDate >= "1995-01-01"^^xsd:date && ?releaseDate <= "2005-12-31"^^xsd:date)
+  FILTER(?releaseDate >= "2016-01-01"^^xsd:date && ?releaseDate <= "2020-12-31"^^xsd:date && ?critics > 15)
   
   {
     SELECT ?genre (SAMPLE(?gameName) AS ?topGameName) (MAX(?scoreValue) AS ?topScore)
@@ -93,8 +94,9 @@ WHERE {
       ?g ex:genre ?genre ;
          ex:score ?scoreValue ;
          ex:releaseDate ?releaseDate ;
+         ex:critics ?critics ;
          rdfs:label ?gameName .
-      FILTER(?releaseDate >= "1995-01-01"^^xsd:date && ?releaseDate <= "2005-12-31"^^xsd:date)
+      FILTER(?releaseDate >= "2016-01-01"^^xsd:date && ?releaseDate <= "2020-12-31"^^xsd:date && ?critics > 15)
     }
     GROUP BY ?genre
   }
@@ -102,18 +104,58 @@ WHERE {
 GROUP BY ?genreName ?topGameName ?topScore
 HAVING (COUNT(?game) >= 10)
 ORDER BY DESC(?avgScore)
-LIMIT 10
+LIMIT 3
 
-# 5. Nota de criticos promedio por año
+# 5. Nota promedio del año y con mejor juego del año según criticos y usuarios
 
-SELECT ?year (FLOOR(AVG(?scoreValue)*100)/100 AS ?avgScore)
+SELECT ?year (FLOOR(AVG(?scoreValue)*100)/100 AS ?criticAvg) (FLOOR(AVG(?userScoreValue)*100)/100 AS ?userAvg) ?topCriticGameName ?topCriticScore ?topUserGameName ?topUserScore
 WHERE {
   ?game ex:score ?scoreValue ;
-        ex:releaseDate ?date .
+        ex:userScore ?userScoreValue ;
+        ex:releaseDate ?date ;
+        ex:users ?users ;
+        ex:critics ?critics .
+  FILTER(?users > 50)
+  FILTER(?critics > 15)
   BIND(year(xsd:date(?date)) AS ?year)
+  {
+    SELECT ?yearTop1 
+           (SAMPLE(?name1) AS ?topCriticGameName) 
+           (MAX(?score1) AS ?topCriticScore)
+    WHERE {
+      ?g1 ex:score ?score1 ;
+          ex:releaseDate ?d1 ;
+          ex:users ?users1 ;
+          ex:critics ?critics1 ;
+          rdfs:label ?name1 .
+      FILTER(?users1 > 50)
+      FILTER(?critics1 > 15)
+      BIND(year(xsd:date(?d1)) AS ?yearTop1)
+    }
+    GROUP BY ?yearTop1
+  }
+  {
+    SELECT ?yearTop2 
+           (SAMPLE(?name2) AS ?topUserGameName) 
+           (MAX(?userScore2) AS ?topUserScore)
+    WHERE {
+      ?g2 ex:userScore ?userScore2 ;
+          ex:releaseDate ?d2 ;
+          ex:users ?users2 ;
+          ex:critics ?critics2 ;
+          rdfs:label ?name2 .
+      FILTER(?users2 > 50)
+      FILTER(?critics2 > 15)
+      BIND(year(xsd:date(?d2)) AS ?yearTop2)
+    }
+    GROUP BY ?yearTop2
+  }
+  FILTER(?year = ?yearTop1)
+  FILTER(?year = ?yearTop2)
 }
-GROUP BY ?year
-ORDER BY DESC(?avgScore)
+GROUP BY ?year ?topCriticGameName ?topCriticScore ?topUserGameName ?topUserScore
+ORDER BY ASC(?year)
+
 
 # 6. Mejores plataformas por decada, con su mejor juego respectivo (probar con ex:score y ex:userScore, y cambiar los rangos de decadas).
 
@@ -121,18 +163,26 @@ SELECT ?platformName (FLOOR(AVG(?scoreValue)*100)/100 AS ?avgScore) (COUNT(?game
 WHERE {
   ?game ex:platform ?platform ;
         ex:score ?scoreValue ;
-        ex:releaseDate ?releaseDate .
+        ex:releaseDate ?releaseDate ;
+        ex:critics ?critics .
   ?platform rdfs:label ?platformName .
-  FILTER(?releaseDate >= "1995-01-01"^^xsd:date && ?releaseDate <= "2005-12-31"^^xsd:date)
   
+  FILTER(?releaseDate >= "1994-01-01"^^xsd:date && 
+         ?releaseDate <= "2002-12-31"^^xsd:date)
+  FILTER(?critics > 15)
+
   {
     SELECT ?platform (SAMPLE(?gameName) AS ?topGameName) (MAX(?scoreValue) AS ?topScore)
     WHERE {
       ?g ex:platform ?platform ;
          ex:score ?scoreValue ;
          ex:releaseDate ?releaseDate ;
+         ex:critics ?critics ;
          rdfs:label ?gameName .
-      FILTER(?releaseDate >= "1995-01-01"^^xsd:date && ?releaseDate <= "2005-12-31"^^xsd:date)
+      
+      FILTER(?releaseDate >= "1994-01-01"^^xsd:date && 
+             ?releaseDate <= "2002-12-31"^^xsd:date)
+      FILTER(?critics > 15)
     }
     GROUP BY ?platform
   }
@@ -140,4 +190,3 @@ WHERE {
 GROUP BY ?platformName ?topGameName ?topScore
 HAVING (COUNT(?game) >= 10)
 ORDER BY DESC(?avgScore)
-LIMIT 10
