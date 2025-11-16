@@ -2,8 +2,7 @@
 
 ## Ejecutar generación de triples
 
-´´
-
+```
 ~$ cd tarql/target/appassembler
 
 
@@ -12,7 +11,7 @@
 
 ~$ sort -u ../../../games-data-triples.ttl -o ../../../games-data-triples.ttl
 
-´´
+```
 ## Herramientas y dataset
 
 https://tarql.github.io
